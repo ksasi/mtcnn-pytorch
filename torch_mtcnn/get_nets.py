@@ -4,6 +4,22 @@ import torch.nn.functional as F
 from collections import OrderedDict
 import numpy as np
 
+try:
+    from torch.hub import load_state_dict_from_url
+except ImportError:
+    from torch.utils.model_zoo import load_url as load_state_dict_from_url
+
+
+model_urls = dict(
+    onet='https://github.com/khrlimam/mtcnn-pytorch/releases/download/0.0.1/onet-60cc8dd5.pth',
+    pnet='https://github.com/khrlimam/mtcnn-pytorch/releases/download/0.0.1/pnet-6b6ef92b.pth',
+    rnet='https://github.com/khrlimam/mtcnn-pytorch/releases/download/0.0.1/rnet-b13c48bc.pth'
+)
+
+def load_state(arch, progress=True):
+    state = load_state_dict_from_url(model_urls.get(arch), progress=progress)
+    return state
+
 
 class Flatten(nn.Module):
 
@@ -52,9 +68,7 @@ class PNet(nn.Module):
         self.conv4_1 = nn.Conv2d(32, 2, 1, 1)
         self.conv4_2 = nn.Conv2d(32, 4, 1, 1)
 
-        weights = np.load('./weights/pnet.npy', allow_pickle=True)[()]
-        for n, p in self.named_parameters():
-            p.data = torch.FloatTensor(weights[n])
+        self.load_state_dict(load_state('pnet'))
 
     def forward(self, x):
         """
@@ -97,9 +111,7 @@ class RNet(nn.Module):
         self.conv5_1 = nn.Linear(128, 2)
         self.conv5_2 = nn.Linear(128, 4)
 
-        weights = np.load('./weights/rnet.npy', allow_pickle=True)[()]
-        for n, p in self.named_parameters():
-            p.data = torch.FloatTensor(weights[n])
+        self.load_state_dict(load_state('rnet'))
 
     def forward(self, x):
         """
@@ -148,9 +160,7 @@ class ONet(nn.Module):
         self.conv6_2 = nn.Linear(256, 4)
         self.conv6_3 = nn.Linear(256, 10)
 
-        weights = np.load('./weights/onet.npy', allow_pickle=True)[()]
-        for n, p in self.named_parameters():
-            p.data = torch.FloatTensor(weights[n])
+        self.load_state_dict(load_state('onet'))
 
     def forward(self, x):
         """
