@@ -9,7 +9,7 @@ The original work of this project is always belong to the original creator (http
 ![example of a face detection](https://github.com/TropComplique/mtcnn-pytorch/blob/master/images/example.png)
 
 ## How to use it
-Just download the repository and then do this
+Install the package with pip: `pip install torch-mtcnn`
 ```python
 from torch_mtcnn import detect_faces
 from PIL import Image
