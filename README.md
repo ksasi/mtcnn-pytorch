@@ -1,4 +1,4 @@
-The original work of this project is always belong to the original creator. I just make this available on pypi for easy installation. To install this project just type `pip install torch-mtcnn`
+The original work of this project is always belong to the original creator (https://github.com/TropComplique/mtcnn-pytorch). I just make this available on pypi for easy installation. To install this project just type `pip install torch-mtcnn`
 
 # MTCNN
 
@@ -6,7 +6,7 @@ The original work of this project is always belong to the original creator. I ju
 [Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Networks](https://arxiv.org/abs/1604.02878).
 
 ## Example
-![example of a face detection](images/example.png)
+![example of a face detection](https://github.com/TropComplique/mtcnn-pytorch/blob/master/images/example.png)
 
 ## How to use it
 Just download the repository and then do this
