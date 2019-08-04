@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='torch-mtcnn',
-    version='0.0.2',
+    version='0.0.3',
     author='Dan Antoshchenko',
     description='Implementation of MTCNN using Pytorch.',
     long_description=long_description,
