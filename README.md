@@ -17,7 +17,7 @@ from PIL import Image
 image = Image.open('image.jpg')
 bounding_boxes, landmarks = detect_faces(image)
 ```
-For examples see `test_on_images.ipynb`.
+For a few more examples available on the original repository (link above).
 
 ## Requirements
 * pytorch 0.2
