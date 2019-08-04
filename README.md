@@ -1,3 +1,5 @@
+The original work of this project is always belong to the original creator. I just make this available on pypi for easy installation. To install this project just type `pip install torch-mtcnn`
+
 # MTCNN
 
 `pytorch` implementation of **inference stage** of face detection algorithm described in  
@@ -9,7 +11,7 @@
 ## How to use it
 Just download the repository and then do this
 ```python
-from src import detect_faces
+from torch_mtcnn import detect_faces
 from PIL import Image
 
 image = Image.open('image.jpg')
