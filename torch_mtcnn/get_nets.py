@@ -1,20 +1,22 @@
+from collections import OrderedDict
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from collections import OrderedDict
-import numpy as np
 
 try:
     from torch.hub import load_state_dict_from_url
 except ImportError:
     from torch.utils.model_zoo import load_url as load_state_dict_from_url
 
-
 model_urls = dict(
     onet='https://github.com/khrlimam/mtcnn-pytorch/releases/download/0.0.1/onet-60cc8dd5.pth',
     pnet='https://github.com/khrlimam/mtcnn-pytorch/releases/download/0.0.1/pnet-6b6ef92b.pth',
     rnet='https://github.com/khrlimam/mtcnn-pytorch/releases/download/0.0.1/rnet-b13c48bc.pth'
 )
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 
 def load_state(arch, progress=True):
     state = load_state_dict_from_url(model_urls.get(arch), progress=progress)
@@ -43,7 +45,6 @@ class Flatten(nn.Module):
 class PNet(nn.Module):
 
     def __init__(self):
-
         super(PNet, self).__init__()
 
         # suppose we have input with size HxW, then
@@ -69,6 +70,7 @@ class PNet(nn.Module):
         self.conv4_2 = nn.Conv2d(32, 4, 1, 1)
 
         self.load_state_dict(load_state('pnet'))
+        self.to(device)
 
     def forward(self, x):
         """
@@ -78,6 +80,7 @@ class PNet(nn.Module):
             b: a float tensor with shape [batch_size, 4, h', w'].
             a: a float tensor with shape [batch_size, 2, h', w'].
         """
+        x = x.to(device)
         x = self.features(x)
         a = self.conv4_1(x)
         b = self.conv4_2(x)
@@ -88,7 +91,6 @@ class PNet(nn.Module):
 class RNet(nn.Module):
 
     def __init__(self):
-
         super(RNet, self).__init__()
 
         self.features = nn.Sequential(OrderedDict([
@@ -112,6 +114,7 @@ class RNet(nn.Module):
         self.conv5_2 = nn.Linear(128, 4)
 
         self.load_state_dict(load_state('rnet'))
+        self.to(device)
 
     def forward(self, x):
         """
@@ -121,6 +124,7 @@ class RNet(nn.Module):
             b: a float tensor with shape [batch_size, 4].
             a: a float tensor with shape [batch_size, 2].
         """
+        x = x.to(device)
         x = self.features(x)
         a = self.conv5_1(x)
         b = self.conv5_2(x)
@@ -131,7 +135,6 @@ class RNet(nn.Module):
 class ONet(nn.Module):
 
     def __init__(self):
-
         super(ONet, self).__init__()
 
         self.features = nn.Sequential(OrderedDict([
@@ -161,6 +164,7 @@ class ONet(nn.Module):
         self.conv6_3 = nn.Linear(256, 10)
 
         self.load_state_dict(load_state('onet'))
+        self.to(device)
 
     def forward(self, x):
         """
@@ -171,6 +175,7 @@ class ONet(nn.Module):
             b: a float tensor with shape [batch_size, 4].
             a: a float tensor with shape [batch_size, 2].
         """
+        x = x.to(device)
         x = self.features(x)
         a = self.conv6_1(x)
         b = self.conv6_2(x)
